@@ -47,11 +47,13 @@ const Login = () => {
           </button>
         </div>
         <table className="mt-12 border-collapse w-full text-center text-xl text-font_gray">
-          <tr>
-            <th className="border-r">아이디 찾기</th>
-            <th className="border-r">비밀번호 찾기</th>
-            <th className="">회원가입</th>
-          </tr>
+          <tbody>
+            <tr>
+              <th className="border-r">아이디 찾기</th>
+              <th className="border-r">비밀번호 찾기</th>
+              <th className="">회원가입</th>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
