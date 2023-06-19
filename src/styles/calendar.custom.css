@@ -5,28 +5,37 @@
 .react-calendar__navigation button:disabled {
   background-color: transparent !important;
 }
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: transparent !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.react-calendar__navigation {
+  height: 24px !important;
+  margin-bottom: 16px !important;
+  font-weight: 600;
+}
 
 .react-calendar__tile {
   aspect-ratio: 1/1 !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-}
-
-.react-calendar__navigation {
-  margin-bottom: 0 !important;
+  font-size: 12px;
 }
 
 abbr:where([title]) {
   -webkit-text-decoration: none !important;
   text-decoration: none !important;
+  color: #999da4;
+  font-size: 12px;
+  font-weight: normal;
 }
 
-.sunday {
-  color: #d10000 !important;
-}
+.sunday,
 .saturday {
-  color: #0055ff !important;
+  color: #1e2127 !important;
 }
 
 .react-calendar__month-view__days__day--neighboringMonth {
@@ -43,8 +52,25 @@ abbr:where([title]) {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #e9fe74 !important;
+  background: none !important;
   border-radius: 50% !important;
+}
+
+.react-calendar__tile--active {
+  position: relative;
+  background: none !important;
+}
+
+.react-calendar__tile--active::after {
+  content: "";
+  width: 80%;
+  height: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ced2f2 !important;
+  border-radius: 20% !important;
 }
 
 .react-calendar__tile--active > abbr {
@@ -53,11 +79,28 @@ abbr:where([title]) {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fe7474 !important;
-  border-radius: 50% !important;
+  color: #5464f2 !important;
+  z-index: 2;
 }
 
-.selected {
-  background: rgba(226, 226, 226, 0.53) !important;
-  border: none;
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: none !important;
+}
+
+.react-calendar__navigation button {
+  min-width: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50%;
+  background: #f0f2ff !important;
+  font-weight: 500;
+  color: #6d7bf2;
+  margin: 0 8px !important;
+}
+
+.react-calendar__navigation button > span {
+  color: black;
+  font-weight: 600;
+  letter-spacing: 0.8px;
 }

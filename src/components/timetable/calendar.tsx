@@ -2,6 +2,7 @@ import moment from "moment";
 import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 
 const TimeTableCalendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -10,15 +11,28 @@ const TimeTableCalendar = () => {
       value={selectedDate}
       onClickDay={setSelectedDate}
       calendarType="US"
-      locale="ko-KR"
+      locale="en-US"
       minDetail="month"
       formatDay={(locale, date) =>
         date.toLocaleString("en", { day: "numeric" })
       }
+      navigationLabel={({ date, view }) => {
+        return moment(date).format("YYYY년 MM월");
+        // return moment(date).format("YYYY.MM");
+      }}
       next2Label={null}
       prev2Label={null}
-      nextLabel=">"
-      prevLabel="<"
+      nextLabel={
+        <div className="w-full h-full flex justify-center items-center">
+          <FiChevronRight />
+        </div>
+      }
+      prevLabel={
+        <div className="w-full h-full flex justify-center items-center">
+          <FiChevronLeft />
+        </div>
+      }
+      showNeighboringMonth={false}
       tileClassName={({ date, view }) => {
         let returnVal = "";
         if (view === "month") {
@@ -26,9 +40,6 @@ const TimeTableCalendar = () => {
             returnVal += "sunday";
           } else if (date.getDay() === 6) {
             returnVal += "saturday";
-          }
-          if (moment(date).week() === moment(selectedDate).week()) {
-            returnVal += " selected";
           }
           return returnVal;
         }
