@@ -1,6 +1,3 @@
-const Z_INDEX_SIDEBAR = 100;
-const SIDEBAR_WIDTH = "20rem";
-
 const nameRegEx = /^[가-힣]+$/;
 const idRegEx = /^[a-zA-Z0-9_]{4,16}$/;
 
@@ -9,11 +6,4 @@ const pwRegEx =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&`])[A-Za-z\d@$!%*?&`]{8,}$/;
 const emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-export {
-  SIDEBAR_WIDTH,
-  Z_INDEX_SIDEBAR,
-  nameRegEx,
-  idRegEx,
-  pwRegEx,
-  emailRegEx,
-};
+export { nameRegEx, idRegEx, pwRegEx, emailRegEx };

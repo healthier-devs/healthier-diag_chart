@@ -41,7 +41,7 @@ const Login = () => {
               placeholder="비밀번호를 입력해주세요"
             />
           </div>
-          <button className="mt-8 w-full h-14 rounded-[80px] p-4 bg-healthier_blue text-white text-xl">
+          <button className="mt-8 w-full h-14 rounded-[80px] p-4 bg-app_healthier_blue text-white text-xl">
             로그인 하기
           </button>
         </div>
