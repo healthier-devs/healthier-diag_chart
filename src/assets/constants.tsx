@@ -6,4 +6,8 @@ const pwRegEx =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&`])[A-Za-z\d@$!%*?&`]{8,}$/;
 const emailRegEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-export { nameRegEx, idRegEx, pwRegEx, emailRegEx };
+const DoW = ["일", "월", "화", "수", "목", "금", "토"];
+
+const paginationNum = 5;
+
+export { nameRegEx, idRegEx, pwRegEx, emailRegEx, DoW, paginationNum };

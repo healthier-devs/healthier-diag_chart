@@ -1,5 +1,8 @@
 .react-calendar {
   border: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .react-calendar__navigation button:disabled {
@@ -12,6 +15,7 @@
 }
 
 .react-calendar__navigation {
+  width: 66%;
   height: 24px !important;
   margin-bottom: 16px !important;
   font-weight: 600;
@@ -44,6 +48,7 @@ abbr:where([title]) {
 
 .react-calendar__tile--now {
   background: none !important;
+  color: rgba(84, 100, 242, 1) !important;
 }
 
 .react-calendar__tile--now > abbr {
@@ -96,11 +101,11 @@ abbr:where([title]) {
   background: #f0f2ff !important;
   font-weight: 500;
   color: #6d7bf2;
-  margin: 0 8px !important;
+  margin: 0 4px !important;
 }
 
 .react-calendar__navigation button > span {
   color: black;
   font-weight: 600;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
 }

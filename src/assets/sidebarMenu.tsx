@@ -1,6 +1,5 @@
 export const SidebarMenu = [
-  { name: "dashboard", link: "/dashboard", label: "대시보드" },
-  { name: "reservation_list", link: "/reservation", label: "예약 요청" },
+  { name: "reservation_list", link: "/reservation", label: "예약 관리" },
   { name: "patient_list", link: "/patient", label: "환자 목록" },
   { name: "visit_list", link: "/visit", label: "내원 기록" },
   { name: "setting", link: "/setting", label: "시스템 HR 관리" },

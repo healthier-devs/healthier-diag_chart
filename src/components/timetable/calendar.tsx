@@ -4,12 +4,16 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 
-const TimeTableCalendar = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+interface ICalendarProps {
+  date: Date;
+  setDate: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+const TimeTableCalendar = ({ date, setDate }: ICalendarProps) => {
   return (
     <Calendar
-      value={selectedDate}
-      onClickDay={setSelectedDate}
+      value={date}
+      onClickDay={setDate}
       calendarType="US"
       locale="en-US"
       minDetail="month"
@@ -23,7 +27,7 @@ const TimeTableCalendar = () => {
       next2Label={null}
       prev2Label={null}
       nextLabel={
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full h-full flex justify-center items-center ">
           <FiChevronRight />
         </div>
       }

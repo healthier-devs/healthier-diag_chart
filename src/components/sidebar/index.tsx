@@ -27,7 +27,6 @@ const HospitalProfile = () => {
 
 const Sidebar = () => {
   const router = useRouter();
-  console.log(router.pathname);
   return (
     <nav
       className={`w-Sidebar h-full bg-app_indigo flex flex-col justify-start items-start`}
