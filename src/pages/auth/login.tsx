@@ -11,7 +11,7 @@ const Login = () => {
   return (
     <div className="w-[100vw] h-[100vh] bg-app_gray_900 flex justify-center items-center">
       <div className="w-[37.5%] h-full flex flex-col justify-center items-center mb-10">
-        <div className="w-[43.5%] h-9 relative">
+        <div className="w-[43.5%] h-9 relative mb-10">
           <Image
             src="/images/appLogo.png"
             alt="appLogo"
@@ -45,7 +45,7 @@ const Login = () => {
           <button className="mt-8 w-full h-14 rounded-[80px] p-4 bg-app_healthier_blue text-white text-base">
             로그인 하기
           </button>
-          <table className="mt-12 border-collapse w-full text-center text-font_gray_400">
+          <table className="mt-12 border-collapse w-full text-center text-font_gray_400 font-medium">
             <tbody>
               <tr>
                 <th className="border-r-2 border-gray-600">아이디 찾기</th>
