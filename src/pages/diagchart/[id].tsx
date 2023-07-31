@@ -110,7 +110,6 @@ const translateData = (data: IDataProps, setUserData: Function) => {
     note: data.note,
   };
 
-  console.log(tmpData);
   setUserData(tmpData);
 };
 

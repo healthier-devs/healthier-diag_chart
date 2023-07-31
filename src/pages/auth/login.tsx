@@ -21,7 +21,6 @@ const Login = () => {
         password: loginData.pw,
       })
         .then((res) => {
-          console.log(res);
           if (res.accessToken === undefined) {
             throw new Error("아이디와 비밀번호를 확인해주세요");
           } else {

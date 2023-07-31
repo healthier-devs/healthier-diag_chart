@@ -13,10 +13,6 @@ const CustomInput = ({ holder, value, onChange }: IInputProps) => {
     onChange(e.target.value);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLImageElement>) => {
-    console.log(value);
-  };
-
   return (
     <div className="relative flex flex-row items-center justify-between w-full pr-5 h-9 bg-app_gray_100 rounded-2xl">
       <input
@@ -25,12 +21,7 @@ const CustomInput = ({ holder, value, onChange }: IInputProps) => {
         onChange={changeHandler}
         className="w-full px-5 py-2 text-xs font-normal bg-transparent text-app_gray_400_body_2 focus:outline-none"
       />
-      <Image
-        src={srcSearchImg}
-        alt="searchIcon"
-        className="cursor-pointer"
-        onClick={handleClick}
-      />
+      <Image src={srcSearchImg} alt="searchIcon" className="cursor-pointer" />
     </div>
   );
 };

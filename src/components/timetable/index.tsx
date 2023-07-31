@@ -20,7 +20,6 @@ const TimeTable = () => {
   const [modalOpenState, setModalOpenState] = useState(false);
 
   const handleTimeModal = () => {
-    console.log("handleTimeModal");
     setModalOpenState(true);
   };
 
@@ -62,16 +61,16 @@ const TimeTable = () => {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     return (
-      <div className="w-full h-full bg-white rounded-xl p-3">
+      <div className="w-full h-full p-3 bg-white rounded-xl">
         <div className="w-full ml-2 font-semibold text-sm mb-3 text-[#787C83]">
           {moment(new Date()).format("yyyy년 M월 D일 ") +
             DoW[moment(new Date()).day()] +
             "요일"}
         </div>
-        <div className="w-full h-12 flex flex-row items-center px-4 justify-between bg-app_gray_100 rounded-t-md">
+        <div className="flex flex-row items-center justify-between w-full h-12 px-4 bg-app_gray_100 rounded-t-md">
           {/* filter area */}
           <div className="flex flex-row gap-2 text-center">
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row items-center justify-center">
               <Datepicker
                 className="w-20 h-6 text-[11px] text-center px-2 rounded border-[#C5C8CE] border bg-[#F8F8F8] mr-1"
                 selected={startDate}
@@ -85,7 +84,7 @@ const TimeTable = () => {
               />
             </div>
             <div className="text-[#999DA4]">-</div>
-            <div className="flex flex-row justify-center items-center">
+            <div className="flex flex-row items-center justify-center">
               <Datepicker
                 className="w-20 h-6 text-[11px] text-center px-2 rounded border-[#C5C8CE] border bg-[#F8F8F8] mr-1"
                 selected={endDate}
@@ -172,7 +171,7 @@ const TimeTable = () => {
   };
 
   return (
-    <div className="w-full h-full bg-app_healthier_bg flex flex-col px-10 pb-8">
+    <div className="flex flex-col w-full h-full px-10 pb-8 bg-app_healthier_bg">
       <Modal
         open={modalOpenState}
         onClose={() => setModalOpenState(false)}
@@ -186,18 +185,15 @@ const TimeTable = () => {
       <div className="w-full mt-[3.75rem] mb-10 font-bold text-xl">
         대시 보드
       </div>
-      <div className="w-full flex flex-row font-bold mb-3 text-base">
+      <div className="flex flex-row w-full mb-3 text-base font-bold">
         <div className="w-full">예약 요청</div>
         <div className="basis-[440px] flex justify-start">예약 현황</div>
       </div>
 
-      <div className="w-full h-full flex flex-row gap-4">
+      <div className="flex flex-row w-full h-full gap-4">
         <WaitingList />
         <div className="w-[300px] h-full bg-white rounded-2xl p-4 flex gap-3 flex-col justify-start items-center">
-          <TimeTableCalendar
-            date={selectedDate}
-            setDate={setSelectedDate}
-          />
+          <TimeTableCalendar date={selectedDate} setDate={setSelectedDate} />
           <ReservationList date={selectedDate} />
         </div>
       </div>

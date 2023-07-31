@@ -131,7 +131,6 @@ const PatientList: NextPageWithLayout = () => {
       "h-full px-3 text-app_gray_750 leading-5 text-xs font-normal";
 
     const handleDiagChart = () => {
-      console.log(data.soapUuid);
       Router.push(`/diagchart/${data.soapUuid}`);
     };
 
@@ -166,7 +165,6 @@ const PatientList: NextPageWithLayout = () => {
 
   useEffect(() => {
     getPatientList().then((res) => {
-      console.log(res);
       setPatientList(res.patientList);
     });
   }, []);
