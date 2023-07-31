@@ -6,7 +6,7 @@ import leftIconSrc from "@/assets/images/icon_chevron_left.svg";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
 import IndexBtn from "@/components/IndexBtn";
-import { getDiagChart } from "@/api/patient";
+import { getDiagChart, noteDiagChart } from "@/api/patient";
 
 interface IChartProps {
   name: string;
@@ -125,7 +125,25 @@ const DiagChart: NextPageWithLayout<IDCProps> = ({ id }) => {
 
   useEffect(() => {
     getDiagChart(id).then((res) => translateData(res, setUserData));
+    setNewNote("");
   }, [id]);
+
+  const handleNewNote = () => {
+    if (newNote !== userData?.note) {
+      noteDiagChart(id, {
+        note: newNote,
+      }).then((res) => {
+        setUserData((prev) => {
+          if (prev) {
+            return {
+              ...prev,
+              note: res.note,
+            };
+          }
+        });
+      });
+    }
+  };
 
   // useEffect(() => {
   //   translateData(dummyData, setUserData);
@@ -259,6 +277,8 @@ const DiagChart: NextPageWithLayout<IDCProps> = ({ id }) => {
                   }
                   placeholder={userData.note || "진료 시 소견을 적어주세요"}
                   value={newNote}
+                  onChange={(e) => setNewNote(e.target.value)}
+                  onBlur={handleNewNote}
                 ></textarea>
               </div>
             </div>
