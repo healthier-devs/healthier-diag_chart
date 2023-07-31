@@ -10,6 +10,10 @@
   box-sizing: border-box;
   font-family: "sopqa han sans", sans-serif;
 }
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
 
 @font-face {
   font-family: "Spoqa Han Sans";
