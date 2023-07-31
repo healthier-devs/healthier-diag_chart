@@ -4,12 +4,12 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 
-export type NextPageWithLayout = NextPage & {
+export type NextPageWithLayout<Props = {}> = NextPage<Props> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+  Component: NextPageWithLayout<any>;
 };
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {

@@ -123,7 +123,7 @@ const TimeTable = () => {
             </tr>
           </thead>
         </table>
-        <table className="block w-full h-[360px] overflow-y-auto">
+        <table className="block w-full h-[55vh] overflow-y-auto">
           <colgroup>
             <col width="10%" />
             <col width="14%" />
@@ -140,6 +140,9 @@ const TimeTable = () => {
             <PatientList />
             <PatientList />
             <PatientList tmp={3} />
+            <PatientList />
+            <PatientList />
+            <PatientList />
             <PatientList />
             <PatientList />
             <PatientList />
