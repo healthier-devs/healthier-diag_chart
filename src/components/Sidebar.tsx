@@ -6,13 +6,34 @@ import logoSrc from "@/assets/images/appLogo_black.png";
 import { useEffect, useState } from "react";
 import { getPatientList } from "@/api/patient";
 import moment from "moment";
+import { useRecoilState } from "recoil";
+import { patientRecoilList } from "@/utils/atom";
+import { getHospitalInfo, onReissue } from "@/api/auth";
 
 const Sidebar = () => {
-  const [patientList, setPatientList] = useState([]);
+  const [patientList, setPatientList] = useRecoilState(patientRecoilList);
+  const Router = useRouter();
+
+  const fetchApi = async () => {
+    const pL = await getPatientList(
+      0,
+      20,
+      undefined,
+      moment(new Date()).format("YYYY-MM-DD")
+    );
+    console.log("pL:", pL);
+    if (pL.code === "ERR_NETWORK") {
+      const wait = await onReissue();
+      console.log("reissue:", wait);
+    } else {
+      setPatientList(pL.patientList);
+      const hospitalInfo = await getHospitalInfo();
+      console.log("hospital", hospitalInfo);
+    }
+  };
+
   useEffect(() => {
-    getPatientList().then((res) => {
-      setPatientList(res.patientList);
-    });
+    fetchApi();
   }, []);
 
   const Profile = () => {
@@ -27,8 +48,7 @@ const Sidebar = () => {
     data: any;
   }
   const PatientComponent = ({ data }: IPCType) => {
-    const selected = router.query.id === data.soapUuid;
-    const Router = useRouter();
+    const selected = Router.query.id === data.soapUuid;
     return (
       <div
         onClick={() => Router.push(`/diagchart/${data.soapUuid}`)}
@@ -48,7 +68,6 @@ const Sidebar = () => {
       </div>
     );
   };
-  const router = useRouter();
   return (
     <nav
       className={`w-Sidebar h-full bg-app_healthier_sidebar flex flex-col px-4 justify-start items-start border-r border-app_stroke_gray_200 rounded-xl `}
@@ -74,9 +93,10 @@ const Sidebar = () => {
           환자 목록
         </div>
         <div className="w-full gap-0.5 flex flex-col justify-start overflow-y-auto">
-          {patientList.map((data, idx) => {
-            return <PatientComponent key={idx} data={data} />;
-          })}
+          {patientList &&
+            patientList.map((data, idx) => {
+              return <PatientComponent key={idx} data={data} />;
+            })}
         </div>
       </div>
     </nav>
