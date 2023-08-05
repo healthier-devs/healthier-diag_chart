@@ -24,10 +24,7 @@ const Login = () => {
           if (res.accessToken === undefined) {
             throw new Error("아이디와 비밀번호를 확인해주세요");
           } else {
-            localStorage.setItem(
-              "refreshToken",
-              JSON.stringify(res.refreshToken)
-            );
+            localStorage.setItem("refreshToken", res.refreshToken);
             localStorage.setItem("accessToken", res.accessToken); // cookie저장으로 바꾸기
             Router.push("/patientList");
           }
