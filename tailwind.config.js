@@ -29,6 +29,7 @@ module.exports = {
         app_healthier_blue: "#5464F2",
         app_healthier_indigo: "rgba(84, 100, 242, 0.3)",
         app_healthier_sidebar : "rgba(232, 232, 232, 0.50)",
+        app_sub_blue: '#b7beff',
         app_indigo: "#041029",
       },
       backgroundColor: {
