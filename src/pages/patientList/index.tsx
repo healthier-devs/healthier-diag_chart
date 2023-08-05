@@ -158,7 +158,7 @@ const PatientList: NextPageWithLayout = () => {
         <td className={`${tdClsName}`}>{data.patient.age}세</td>
         <td className={`${tdClsName}`}>{data.cc}</td>
         <td className={`${tdClsName}`}>
-          {moment(data.submitTime).format("HH:mm")}
+          {moment(data.submitTime).add(9, "hours").format("HH:mm")}
         </td>
         <td className={`${tdClsName}`}>
           {data.status === "WAITING" ? (
@@ -327,7 +327,7 @@ const PatientList: NextPageWithLayout = () => {
                 </colgroup>
                 <tbody className="h-full text-left">
                   {searchWaiting === "" ? (
-                    patientList.length > 0 ? (
+                    patientList && patientList.length > 0 ? (
                       patientList.map((patient, idx) => {
                         return (
                           <PatinetDataComponent
