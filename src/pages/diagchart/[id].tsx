@@ -7,6 +7,7 @@ import Image from "next/image";
 import { GetServerSideProps } from "next";
 import IndexBtn from "@/components/IndexBtn";
 import { getDiagChart, noteDiagChart } from "@/api/patient";
+import modifyIconSrc from "@/assets/images/icon_modify.svg";
 
 interface IChartProps {
   name: string;
@@ -113,10 +114,39 @@ const translateData = (data: IDataProps, setUserData: Function) => {
   setUserData(tmpData);
 };
 
+interface IBIProps {
+  height: string;
+  setHeight: Function;
+  weight: string;
+  setWeight: Function;
+}
+const BMIInput = ({ height, setHeight, weight, setWeight }: IBIProps) => {
+  return (
+    <div className="rounded-xl">
+      <input
+        className="text-[11px] leading-5 text-app_gray_600 w-16 pl-4 h-7 rounded-l-xl focus:outline-none"
+        value={height}
+        placeholder="Height"
+        onChange={(e) => setHeight(e.target.value)}
+      />
+      /
+      <input
+        className="text-[11px] leading-5 text-app_gray_600 w-16 px-2 h-7 rounded-r-xl focus:outline-none"
+        value={weight}
+        placeholder="Weight"
+        onChange={(e) => setWeight(e.target.value)}
+      />
+    </div>
+  );
+};
 const DiagChart: NextPageWithLayout<IDCProps> = ({ id }) => {
   const Router = useRouter();
   const [userData, setUserData] = useState<IUserType>();
   const [newNote, setNewNote] = useState<string>("");
+  const [modifyBMI, setModifyBMI] = useState<boolean>(false);
+  const [height, setHeight] = useState<string>("");
+  const [weight, setWeight] = useState<string>("");
+
   const bbCls = " border-b-[0.8px] border-app_gray_200_body_1";
   const text1Cls = " text-app_gray_750 text-sm font-normal leading-5";
   const text2Cls =
@@ -124,8 +154,15 @@ const DiagChart: NextPageWithLayout<IDCProps> = ({ id }) => {
 
   useEffect(() => {
     getDiagChart(id).then((res) => translateData(res, setUserData));
-    setNewNote("");
   }, [id]);
+
+  useEffect(() => {
+    if (userData) {
+      setNewNote(userData.note || "");
+      setHeight(String(userData.height) || "");
+      setWeight(String(userData.weight) || "");
+    }
+  }, [userData]);
 
   const handleNewNote = () => {
     if (newNote !== userData?.note) {
@@ -148,6 +185,17 @@ const DiagChart: NextPageWithLayout<IDCProps> = ({ id }) => {
   //   translateData(dummyData, setUserData);
   // }, []);
 
+  const handleChangeBMI = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    which: string
+  ) => {
+    if (which === "height") {
+      setHeight(e.target.value);
+    } else {
+      setWeight(e.target.value);
+    }
+  };
+
   return userData ? (
     <div className="h-full w-Content">
       <div className="flex flex-col w-full h-full px-8 pb-12 bg-app_gray_100">
@@ -166,14 +214,53 @@ const DiagChart: NextPageWithLayout<IDCProps> = ({ id }) => {
         <div className="flex flex-row flex-grow w-full h-[300px] gap-4">
           <div className="flex flex-col items-start justify-start flex-grow w-[547px] h-full bg-white rounded-2xl p-4">
             {/* 1열 */}
-            <div className={`w-full flex flex-row gap-8 pt-1 pb-4 ${bbCls}`}>
+            <div className={`w-full flex flex-row gap-12 pt-1 pb-4 ${bbCls}`}>
               <span className={"flex flex-row items-center gap-3" + text1Cls}>
                 <IndexBtn placeholder="Gender/Age" type={1} />
                 {userData.gender?.toUpperCase() || "None"} / {userData.age}
               </span>
               <span className={"flex flex-row items-center gap-3" + text1Cls}>
                 <IndexBtn placeholder="Height/Weight" type={1} />
-                {userData.height || "None"} / {userData.weight || "None"}
+                {modifyBMI ? (
+                  <BMIInput
+                    height={height}
+                    setHeight={setHeight}
+                    weight={weight}
+                    setWeight={setWeight}
+                  />
+                ) : userData.height || userData.weight ? (
+                  <>
+                    {userData.height}cm / {userData.weight}kg
+                  </>
+                ) : (
+                  <div className="text-app_gray_200 text-[11px] leading-5 border-app_sub_blue rounded-xl border-[0.6px] w-[140px] h-7 justify-center items-center flex">
+                    BMI 정보를 입력해주세요
+                  </div>
+                )}
+                <Image
+                  src={modifyIconSrc}
+                  alt="modifyIcon"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setModifyBMI((prev) => !prev);
+                    if (modifyBMI) {
+                      noteDiagChart(id, {
+                        height: Number(height),
+                        weight: Number(weight),
+                      }).then((res) => {
+                        setUserData((prev) => {
+                          if (prev) {
+                            return {
+                              ...prev,
+                              height: Number(height),
+                              weight: Number(weight),
+                            };
+                          }
+                        });
+                      });
+                    }
+                  }}
+                />
               </span>
             </div>
             {/* 2열 */}
@@ -274,7 +361,7 @@ const DiagChart: NextPageWithLayout<IDCProps> = ({ id }) => {
                     text2Cls +
                     "text-app_gray_400 h-full w-full focus:outline-none p-2"
                   }
-                  placeholder={userData.note || "진료 시 소견을 적어주세요"}
+                  placeholder={newNote || "진료 시 소견을 적어주세요"}
                   value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
                   onBlur={handleNewNote}
