@@ -13,7 +13,9 @@ const TimeTableCalendar = ({ date, setDate }: ICalendarProps) => {
   return (
     <Calendar
       value={date}
-      onClickDay={setDate}
+      onClickDay={(date) => {
+        setDate(date);
+      }}
       calendarType="US"
       locale="en-US"
       minDetail="month"
@@ -27,12 +29,12 @@ const TimeTableCalendar = ({ date, setDate }: ICalendarProps) => {
       next2Label={null}
       prev2Label={null}
       nextLabel={
-        <div className="w-full h-full flex justify-center items-center ">
+        <div className="flex items-center justify-center w-full h-full ">
           <FiChevronRight />
         </div>
       }
       prevLabel={
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="flex items-center justify-center w-full h-full">
           <FiChevronLeft />
         </div>
       }
