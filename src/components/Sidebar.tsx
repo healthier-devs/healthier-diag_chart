@@ -10,8 +10,14 @@ import { useRecoilState } from "recoil";
 import { patientRecoilList } from "@/utils/atom";
 import { getHospitalInfo, onReissue } from "@/api/auth";
 
+interface IhData {
+  hospitalName: string;
+  userName: string;
+}
+
 const Sidebar = () => {
   const [patientList, setPatientList] = useRecoilState(patientRecoilList);
+  const [hospitalData, setHospitalData] = useState<IhData>();
   const Router = useRouter();
 
   const fetchApi = async () => {
@@ -28,7 +34,7 @@ const Sidebar = () => {
     } else {
       setPatientList(pL.patientList);
       const hospitalInfo = await getHospitalInfo();
-      console.log("hospital", hospitalInfo);
+      setHospitalData(hospitalInfo);
     }
   };
 
@@ -37,11 +43,22 @@ const Sidebar = () => {
   }, []);
 
   const Profile = () => {
-    return (
+    return hospitalData ? (
       <div className="w-full flex flex-col justify-start gap-1 pb-5 border-b-[0.4px] border-[#c5c8ce]">
-        <div className="text-xs text-font_healthier_blue">세브란스 병원</div>
-        <div className="text-lg font-bold leading-5">홍길동 원장님</div>
+        <div className="text-xs text-font_healthier_blue">
+          {hospitalData?.hospitalName || "테스팅 병원"}
+        </div>
+        <div className="text-lg font-bold leading-5">
+          {hospitalData.userName || "홍길동"} 원장님
+        </div>
       </div>
+    ) : (
+      <>
+        <div className="w-full flex flex-col justify-start gap-1 pb-5 border-b-[0.4px] border-[#c5c8ce]">
+          <div className="text-xs text-font_healthier_blue">테스팅 병원</div>
+          <div className="text-lg font-bold leading-5">홍길동 원장님</div>
+        </div>
+      </>
     );
   };
   interface IPCType {
