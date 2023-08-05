@@ -7,11 +7,16 @@ import CustomInput from "@/components/Input";
 import {
   searchWaitingPatient as searchWait,
   searchCompletePatient as searchComp,
+  patientRecoilList,
 } from "@/utils/atom";
 import { useRecoilState } from "recoil";
 import CustomButton from "@/components/Button";
-import { getPatientList } from "@/api/patient";
+import { getPatientList, patchDiagStatus } from "@/api/patient";
 import { useRouter } from "next/router";
+import TimeTableCalendar from "@/components/timetable/calendar";
+import Image from "next/image";
+import iconFoldSrc from "@/assets/images/icon_chevron_fold.svg";
+import iconUpSrc from "@/assets/images/icon_chevron_up.svg";
 
 interface IRLProps {
   data: any;
@@ -32,6 +37,8 @@ interface PatientDataProps {
   soapUuid: string;
   status: string;
 }
+
+const weekday = ["일", "월", "화", "수", "목", "금", "토"];
 
 const ReservedList = ({
   data,
@@ -122,7 +129,11 @@ const PatientList: NextPageWithLayout = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [searchWaiting, setSearchWaiting] = useRecoilState(searchWait);
   const [searchComplete, setSearchComplete] = useRecoilState(searchComp);
-  const [patientList, setPatientList] = useState<PatientDataProps[]>([]);
+  const [openCalendar, setOpenCalendar] = useState<boolean>(false);
+  // const [patientList, setPatientList] = useState<PatientDataProps[]>([]);
+  const [patientList, setPatientList] = useRecoilState(patientRecoilList);
+  const [renderList, setRenderList] = useState<PatientDataProps[]>([]);
+
   const thClsName =
     "px-3 font-normal text-app_gray_700 leading-4 text-xs tracking-[-0.24px]";
 
@@ -151,7 +162,17 @@ const PatientList: NextPageWithLayout = () => {
         </td>
         <td className={`${tdClsName}`}>
           {data.status === "WAITING" ? (
-            <CustomButton type={1} value="진료 전" />
+            <CustomButton
+              type={1}
+              value="진료 시작"
+              onClick={() => handleDiagPatch(data, "IN_PROGRESS")}
+            />
+          ) : data.status === "IN_PROGRESS" ? (
+            <CustomButton
+              type={2}
+              value="진료 중"
+              onClick={() => handleDiagPatch(data, "COMPLETED")}
+            />
           ) : (
             <CustomButton type={2} value="진료 완료" />
           )}
@@ -163,11 +184,38 @@ const PatientList: NextPageWithLayout = () => {
     );
   };
 
-  useEffect(() => {
-    getPatientList().then((res) => {
+  // useEffect(() => {
+  //   getPatientList().then((res) => {
+  //     setPatientList(res.patientList);
+  //   });
+  // }, []);
+
+  const handleDiagPatch = async (data: PatientDataProps, status: string) => {
+    await patchDiagStatus(data.visitRecordId, status);
+    getPatientList(
+      0,
+      20,
+      undefined,
+      moment(selectedDate).format("YYYY-MM-DD")
+    ).then((res) => {
       setPatientList(res.patientList);
     });
-  }, []);
+  };
+
+  const handleDateChange = async () => {
+    const res = await getPatientList(
+      undefined,
+      undefined,
+      undefined,
+      moment(selectedDate).format("YYYY-MM-DD")
+    );
+    setPatientList(res.patientList);
+  };
+
+  useEffect(() => {
+    setOpenCalendar(false);
+    handleDateChange();
+  }, [selectedDate]);
 
   return (
     <div className="h-full w-Content">
@@ -178,7 +226,43 @@ const PatientList: NextPageWithLayout = () => {
         <div className="flex flex-row w-full mb-3 text-base font-bold h-fit">
           <div className="flex flex-row items-center w-[642px] flex-grow h-5 gap-3">
             <div className="pr-3 border-r border-app_gray_300">진료날짜</div>
-            <div className=""></div>
+            <div className="relative flex flex-row gap-3 ">
+              <div
+                className="text-app_healthier_blue text-[14px] font-bold leading-5"
+                onClick={() => {
+                  setOpenCalendar((prev) => !prev);
+                }}
+              >
+                {moment(selectedDate).format("YYYY년 M월 D일 ") +
+                  weekday[selectedDate.getDay()] +
+                  "요일"}
+              </div>
+              {openCalendar ? (
+                <Image
+                  src={iconUpSrc}
+                  alt="up"
+                  onClick={() => {
+                    setOpenCalendar(false);
+                  }}
+                />
+              ) : (
+                <Image
+                  src={iconFoldSrc}
+                  alt="fold"
+                  onClick={() => {
+                    setOpenCalendar(true);
+                  }}
+                />
+              )}
+              {openCalendar && (
+                <div className="absolute z-10 p-4 bg-white border top-10 rounded-xl">
+                  <TimeTableCalendar
+                    date={selectedDate}
+                    setDate={setSelectedDate}
+                  />
+                </div>
+              )}
+            </div>
           </div>
           <div className="basis-[310px] flex justify-start">진료완료 환자</div>
         </div>
@@ -197,7 +281,7 @@ const PatientList: NextPageWithLayout = () => {
                 />
               </div>
               <span className="self-end text-app_gray_400_body_2 font-normal text-[10px] tracking-[-0.27px]">
-                환자가 병원에 방문하면 [내원]버튼을 눌러주세요
+                환자의 진료를 시작하기 전 [ 진료 시작 ] 버튼을 눌러주세요
               </span>
             </div>
 
@@ -242,8 +326,8 @@ const PatientList: NextPageWithLayout = () => {
                   <col style={{ width: "13.1%" }} />
                 </colgroup>
                 <tbody className="h-full text-left">
-                  {searchWaiting === ""
-                    ? patientList &&
+                  {searchWaiting === "" ? (
+                    patientList.length > 0 ? (
                       patientList.map((patient, idx) => {
                         return (
                           <PatinetDataComponent
@@ -253,19 +337,28 @@ const PatientList: NextPageWithLayout = () => {
                           />
                         );
                       })
-                    : patientList
-                        .filter((elem) =>
-                          elem.patient.name.includes(searchWaiting)
-                        )
-                        .map((patient, idx) => {
-                          return (
-                            <PatinetDataComponent
-                              key={patient.visitRecordId}
-                              data={patient}
-                              idx={idx + 1}
-                            />
-                          );
-                        })}
+                    ) : (
+                      <tr className="w-full">
+                        <td className="w-full">
+                          진료 예약 대기중인 환자가 없습니다
+                        </td>
+                      </tr>
+                    )
+                  ) : (
+                    patientList
+                      .filter((elem) =>
+                        elem.patient.name.includes(searchWaiting)
+                      )
+                      .map((patient, idx) => {
+                        return (
+                          <PatinetDataComponent
+                            key={patient.visitRecordId}
+                            data={patient}
+                            idx={idx + 1}
+                          />
+                        );
+                      })
+                  )}
                 </tbody>
               </table>
             </div>
