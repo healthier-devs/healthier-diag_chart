@@ -27,7 +27,7 @@ const Sidebar = () => {
       undefined,
       moment(new Date()).format("YYYY-MM-DD")
     );
-    console.log("pL:", pL);
+
     if (pL.code === "ERR_NETWORK") {
       const wait = await onReissue();
       console.log("reissue:", wait);
