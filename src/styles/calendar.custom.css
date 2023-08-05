@@ -1,4 +1,5 @@
 .react-calendar {
+  width: 270px !important;
   border: none !important;
   display: flex;
   flex-direction: column;
@@ -80,7 +81,7 @@ abbr:where([title]) {
 }
 
 .react-calendar__tile--active > abbr {
-  width: 100%;
+  width: 80%;
   aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
@@ -106,7 +107,8 @@ abbr:where([title]) {
 }
 
 .react-calendar__navigation button > span {
-  color: black;
-  font-weight: 600;
+  color: #131416;
+  font-weight: 700;
+  font-size: 16px;
   letter-spacing: 0.5px;
 }
